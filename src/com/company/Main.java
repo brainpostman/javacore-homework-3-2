@@ -1,7 +1,7 @@
 package com.company;
 
 import java.io.*;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -9,25 +9,22 @@ import java.util.zip.ZipOutputStream;
 public class Main {
 
     public static void main(String[] args) {
-        File fileSave1 = new File("D://Games/Game/savegames", "save1.dat");
-        File fileSave2 = new File("D://Games/Game/savegames", "save2.dat");
-        File fileSave3 = new File("D://Games/Game/savegames", "save3.dat");
-        List<File> saveFiles = new ArrayList<>();
-        saveFiles.add(fileSave1);
-        saveFiles.add(fileSave2);
-        saveFiles.add(fileSave3);
-        GameProgress save1 = new GameProgress(100, 2, 5, 20.4);
-        GameProgress save2 = new GameProgress(50, 4, 7, 70.2);
-        GameProgress save3 = new GameProgress(74, 6, 9, 96.56);
-        saveGame(saveFiles.get(0), save1);
-        saveGame(saveFiles.get(1), save2);
-        saveGame(saveFiles.get(2), save3);
+        List<File> saveFiles = Arrays.asList(
+                new File("D://Games/Game/savegames", "save1.dat"),
+                new File("D://Games/Game/savegames", "save2.dat"),
+                new File("D://Games/Game/savegames", "save3.dat"));
+        List<GameProgress> gameStates = Arrays.asList(
+                new GameProgress(100, 2, 5, 20.4),
+                new GameProgress(50, 4, 7, 70.2),
+                new GameProgress(74, 6, 9, 96.56));
+        for (int i = 0; i < saveFiles.size(); i++) {
+            saveGame(saveFiles.get(i), gameStates.get(i));
+        }
         zipFiles("D://Games/Game/savegames/saves.zip", saveFiles);
-        fileSave1.delete();
-        fileSave2.delete();
-        fileSave3.delete();
+        for (File file : saveFiles) {
+            file.delete();
+        }
     }
-
 
     public static void saveGame(File file, GameProgress gp) {
         try (FileOutputStream fos = new FileOutputStream(file.getPath());
